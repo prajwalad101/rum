@@ -1,4 +1,4 @@
-module github.com/prajwalad101/za
+module github.com/prajwalad101/rum
 
 go 1.20
 

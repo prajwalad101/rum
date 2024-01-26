@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/prajwalad101/za/util"
+	"github.com/prajwalad101/rum/util"
 	"github.com/spf13/cobra"
 )
 
@@ -14,8 +14,10 @@ func init() {
 }
 
 var prCommand = &cobra.Command{
-	Use:  "pr",
-	Args: cobra.MinimumNArgs(1),
+	Use:   "pr [source-branch] destination-branch",
+	Args:  cobra.MinimumNArgs(1),
+	Short: "Open pull requests in the browser",
+	Long:  "Open pull requests by specifying source and destination branches. If no source branch is specified, it takes the currently checked out branch",
 	Run: func(_ *cobra.Command, args []string) {
 		var sourceBranch string
 		var destinationBranch string
