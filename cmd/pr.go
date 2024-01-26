@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/prajwalad101/za/util"
 	"github.com/spf13/cobra"
@@ -33,8 +34,16 @@ var prCommand = &cobra.Command{
 			destinationBranch = args[1]
 		}
 
-		repoUrl := fmt.Sprintf("https://us-west-2.console.aws.amazon.com/codesuite/codecommit/repositories/veribom-fe/pull-requests/new/refs/heads/%s/.../refs/heads/%s?region=us-west-2", destinationBranch, sourceBranch)
+		destinationBranch = strings.Trim(destinationBranch, "\n")
+		sourceBranch = strings.Trim(sourceBranch, "\n")
+
+		repositoryName, err := getRepositoryName()
+
+		repoUrl := fmt.Sprintf("https://us-west-2.console.aws.amazon.com/codesuite/codecommit/repositories/%s/pull-requests/new/refs/heads/%s/.../refs/heads/%s?region=us-west-2", repositoryName, destinationBranch, sourceBranch)
 		openURL(repoUrl)
+		if err != nil {
+			fmt.Println(err)
+		}
 	},
 }
 
@@ -56,7 +65,7 @@ func getBranchName() (string, error) {
 }
 
 func openURL(url string) error {
-	command := fmt.Sprintf("xdg-open %s", url)
+	command := fmt.Sprintf("xdg-open %s &", url)
 	out, errout, err := util.Shellout(command)
 	if err != nil {
 		return err
@@ -71,4 +80,21 @@ func openURL(url string) error {
 	fmt.Println("Opening url ...")
 
 	return nil
+}
+
+func getRepositoryName() (string, error) {
+	remoteURL, errout, err := util.Shellout("git config --get remote.origin.url")
+	if err != nil {
+		return "", err
+	}
+
+	if errout != "" {
+		return "", errors.New(errout)
+	}
+
+	splitRemoteURL := strings.Split(remoteURL, "@")
+	repositoryName := splitRemoteURL[1]
+	repositoryName = strings.Trim(repositoryName, "\n")
+
+	return repositoryName, nil
 }
