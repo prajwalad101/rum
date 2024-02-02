@@ -41,8 +41,8 @@ var prCommand = &cobra.Command{
 
 		repositoryName, err := getRepositoryName()
 
-		repoUrl := fmt.Sprintf("https://us-west-2.console.aws.amazon.com/codesuite/codecommit/repositories/%s/pull-requests/new/refs/heads/%s/.../refs/heads/%s?region=us-west-2", repositoryName, destinationBranch, sourceBranch)
-		openURL(repoUrl)
+		repoUrl := fmt.Sprintf("https://us-west-2.console.aws.amazon.com/codesuite/codecommit/repositories/%s/pull-requests/new/refs/heads/%s/.../refs/heads/%s", repositoryName, destinationBranch, sourceBranch)
+		err = openURL(repoUrl)
 		if err != nil {
 			fmt.Println(err)
 		}
