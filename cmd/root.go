@@ -16,6 +16,8 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	viewPrCommand.Flags().StringVar(&viewPrStatus, "status", "OPEN", "the status of pull requests to view")
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
